@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Http\Request;
@@ -28,4 +29,5 @@ Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:api')
 Route::middleware('auth:api')->group(function () {
     Route::apiResource('tasks', TaskController::class);
     Route::apiResource('statuses', StatusController::class);
+    Route::get('user/{user}/recent-products', [ProductController::class, 'getRecentPurchasedProducts']);
 });

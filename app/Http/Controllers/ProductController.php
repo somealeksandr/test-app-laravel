@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductResource;
 use App\Models\User;
-use Carbon\Carbon;
+use App\Services\ProductServiceInterface;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class ProductController extends Controller
 {
+    public function __construct(private readonly ProductServiceInterface $productService)
+    {
+    }
+
     /**
      * Get a list of products purchased by the user in the last 30 days.
      *
@@ -17,16 +21,19 @@ class ProductController extends Controller
      */
     public function getRecentPurchasedProducts(User $user): ResourceCollection
     {
-        $date = Carbon::now()->subDays(30);
+        $products = $this->productService->getRecentPurchasedProducts($user);
 
-        $products = $user->orders()
-            ->where('created_at', '>=', $date)
-            ->with('products')
-            ->get()
-            ->flatMap(function ($order) {
-                return $order->products;
-            })
-            ->unique('id');
+        return ProductResource::collection($products);
+    }
+
+    /**
+     * Get the most popular products.
+     *
+     * @return ResourceCollection
+     */
+    public function getPopularProducts(): ResourceCollection
+    {
+        $products = $this->productService->getPopularProducts();
 
         return ProductResource::collection($products);
     }

@@ -30,4 +30,5 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResource('tasks', TaskController::class);
     Route::apiResource('statuses', StatusController::class);
     Route::get('user/{user}/recent-products', [ProductController::class, 'getRecentPurchasedProducts']);
+    Route::get('products/popular-products', [ProductController::class, 'getPopularProducts']);
 });

@@ -17,7 +17,8 @@ class ProductResource extends JsonResource
         return [
             'product_id' => $this->id,
             'name' => $this->name,
-            'order_id' => $this->pivot->order_id,
+            'order_id' => $this->pivot->order_id ?? null,
+            'orders' => $this->orders->count() ?? 0,
             'price' => $this->price,
             'created_at' => $this->created_at->toDateTimeString(),
         ];
